@@ -1,0 +1,52 @@
+﻿@inject HttpClient Http
+
+<div>
+
+    @if (isLoading)
+    {
+    <p>Analyzing...</p>
+    }
+    else
+    {
+        if (analyzeComment != null)
+        {
+            <p>Positivo: @analyzeComment.Positive </p>
+            <p>Neutral:  @analyzeComment.Neutral</p>
+            <p>Negativo: @analyzeComment.Negative</p>
+            <p>Total Comentarios: @analyzeComment.Total</p>
+        }
+        else
+        {
+            <p>Ocurrio un error durante el analisis...</p>
+        }
+    }
+
+    <button @onclick="Close" class="btn btn-primary">Close</button>
+</div>
+
+@code {
+
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+
+    void Close() => BlazoredModal.Close(ModalResult.Ok(true));
+
+    [Parameter] public string videoId { get; set; }
+
+    public bool isLoading = true;
+
+    public AnalyzeComment analyzeComment;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(videoId))
+        {
+            isLoading = true;
+            var response = await Http.GetAsync($"https://localhost:5001/api/videos/{videoId}/analyze");
+            if (response.IsSuccessStatusCode)
+            {
+                analyzeComment = await response.Content.ReadFromJsonAsync<AnalyzeComment>();
+            }
+            isLoading = false;
+        }
+    }
+}

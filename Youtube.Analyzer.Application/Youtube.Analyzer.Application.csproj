@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Youtube.Analyzer.Services\Youtube.Analyzer.Services.csproj" />
+    <ProjectReference Include="..\Youtube.Analyzer.Shared\Youtube.Analyzer.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

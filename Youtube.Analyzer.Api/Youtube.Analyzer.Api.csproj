@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>0fde84a4-94fc-4da9-af72-ede1d17eb816</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Youtube.Analyzer.Application\Youtube.Analyzer.Application.csproj" />
+    <ProjectReference Include="..\Youtube.Analyzer.Models\Youtube.Analyzer.Models.csproj" />
+    <ProjectReference Include="..\Youtube.Analyzer.Services\Youtube.Analyzer.Services.csproj" />
+    <ProjectReference Include="..\Youtube.Analyzer.Shared\Youtube.Analyzer.Shared.csproj" />
+  </ItemGroup>
+
+
+</Project>

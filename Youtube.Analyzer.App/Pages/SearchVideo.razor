@@ -1,0 +1,99 @@
+﻿@page "/"
+@inject HttpClient Http
+@inject IModalService Modal
+
+
+<h1>Video List</h1>
+
+<div>
+    <div class="search">
+        <input type="text" @bind-value="@search" />
+        <button class="btn btn-primary" @onclick="Search">Search</button>
+
+    </div>
+
+    <br />
+    <br />
+
+    <div class="videos-result">
+
+        @if (isLoading == true)
+        {
+            <p>Loading....</p>
+        }
+        else
+        {
+            if (videos != null)
+            {
+                <div>
+                    @foreach (var video in videos)
+                    {
+
+
+                        <div class="card" style="width: 18rem;">
+                            <a href="https://www.youtube.com/watch?v=@video.VideoId" target="_blank">
+                                <img src="@video.Thumbnail" class="card-img-top" alt="...">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">@video.Title</h5>
+                                <button @onclick="@(() => ShowAnalyzeComment(@video.VideoId))" class="btn btn-primary">Analyze Comments</button>
+                            </div>
+                        </div>
+                        <br /> <br />
+                    }
+                </div>
+            }
+        }
+    </div>
+
+</div>
+
+@code {
+
+    void ShowAnalyzeComment(string videoId)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(videoId), videoId);
+        Modal.Show<SummaryComment>("Summary Comments", parameters);
+    }
+
+    private bool isLoading;
+
+    private VideoViewModel[] videos;
+
+    private string search;
+
+    protected override void OnInitialized()
+    {
+        search = "";
+    }
+
+
+    public class VideoViewModel
+    {
+        public string VideoId { get; set; }
+
+        public string Title { get; set; }
+
+        public string Thumbnail { get; set; }
+
+    }
+
+
+    public async Task Search()
+    {
+        if (!string.IsNullOrEmpty(search))
+        {
+            var q = System.Web.HttpUtility.UrlEncode(search);
+
+            isLoading = true;
+            var response = await Http.GetAsync($"https://localhost:5001/api/videos?q={q}");
+            if (response.IsSuccessStatusCode)
+            {
+                videos = await response.Content.ReadFromJsonAsync<VideoViewModel[]>();
+            }
+            isLoading = false;
+        }
+    }
+
+}
